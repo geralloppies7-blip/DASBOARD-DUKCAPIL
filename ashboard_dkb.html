@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard DKB Asmat 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    color: #333;
+  }
+  .header {
+    background: linear-gradient(135deg, #1F4E78, #2E75B6);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .header h1 { font-size: 22px; margin-bottom: 6px; }
+  .header p { font-size: 14px; opacity: 0.9; }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-right: 5px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 5px solid #1F4E78;
+  }
+  .card.blue { border-left-color: #2E75B6; }
+  .card.pink { border-left-color: #E91E63; }
+  .card.green { border-left-color: #4CAF50; }
+  .card.orange { border-left-color: #FF9800; }
+  .card.purple { border-left-color: #9C27B0; }
+  .card-label {
+    font-size: 12px; color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .card-value {
+    font-size: 26px; font-weight: bold;
+    color: #1F4E78; margin-bottom: 4px;
+  }
+  .card-sub { font-size: 12px; color: #888; }
+  .charts {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px; margin-bottom: 20px;
+  }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+  .chart-box {
+    background: white; padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .chart-box h3 {
+    font-size: 14px; color: #1F4E78;
+    margin-bottom: 15px; padding-bottom: 10px;
+    border-bottom: 2px solid #f0f2f5;
+  }
+  canvas { max-height: 350px; }
+  .table-box {
+    background: white; padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .table-box h3 {
+    font-size: 14px; color: #1F4E78;
+    margin-bottom: 15px; padding-bottom: 10px;
+    border-bottom: 2px solid #f0f2f5;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: #1F4E78; color: white; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
+  th { font-weight: 600; }
+  tbody tr:hover { background: #f8f9fa; }
+  td.num { text-align: right; }
+  tfoot { background: #FFD966; font-weight: bold; }
+  .footer {
+    text-align: center; padding: 20px;
+    color: #888; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Dashboard Data Kependudukan</h1>
+  <p>Kabupaten Asmat — DKB Semester I Tahun 2026</p>
+  <div class="badge">📅 30 Juni 2026</div>
+  <div class="badge">🏛️ Dinas Dukcapil Asmat</div>
+</div>
+
+<div class="cards">
+  <div class="card blue">
+    <div class="card-label">Total Penduduk</div>
+    <div class="card-value" id="totalJiwa">-</div>
+    <div class="card-sub">jiwa</div>
+  </div>
+  <div class="card blue">
+    <div class="card-label">Laki-laki</div>
+    <div class="card-value" id="totalL">-</div>
+    <div class="card-sub" id="pctL">-</div>
+  </div>
+  <div class="card pink">
+    <div class="card-label">Perempuan</div>
+    <div class="card-value" id="totalP">-</div>
+    <div class="card-sub" id="pctP">-</div>
+  </div>
+  <div class="card green">
+    <div class="card-label">Kepala Keluarga</div>
+    <div class="card-value" id="totalKK">-</div>
+    <div class="card-sub">KK</div>
+  </div>
+  <div class="card orange">
+    <div class="card-label">Jumlah Distrik</div>
+    <div class="card-value" id="totalDistrik">-</div>
+    <div class="card-sub">distrik</div>
+  </div>
+  <div class="card purple">
+    <div class="card-label">Kepadatan</div>
+    <div class="card-value" id="kepadatan">-</div>
+    <div class="card-sub">jiwa/km²</div>
+  </div>
+</div>
+
+<div class="charts">
+  <div class="chart-box">
+    <h3>📊 Jumlah Penduduk per Distrik</h3>
+    <canvas id="chartBar"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>🥧 Komposisi Jenis Kelamin</h3>
+    <canvas id="chartPie"></canvas>
+  </div>
+</div>
+
+<div class="table-box">
+  <h3>📋 Rekapitulasi Jumlah Penduduk per Distrik</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th><th>Distrik</th><th>Laki-laki</th>
+        <th>Perempuan</th><th>Total Jiwa</th>
+        <th>% Penduduk</th><th>KK</th><th>Rasio L/P</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+    <tfoot id="tfoot"></tfoot>
+  </table>
+</div>
+
+<div class="footer">
+  © 2026 Dinas Kependudukan dan Pencatatan Sipil Kabupaten Asmat<br>
+  Sumber: DKB Semester I 2026
+</div>
+
+<script>
+// ============================================================
+// GANTI DATA DI BAWAH INI DENGAN DATA RIIL ANDA
+// ============================================================
+const data = [
+  { no:1,  nama:"Agats",         L:6500, P:9100, kk:3800 },
+  { no:2,  nama:"Akat",          L:3200, P:3000, kk:1400 },
+  { no:3,  nama:"Aswi",          L:2100, P:2000, kk:950  },
+  { no:4,  nama:"Atsy",          L:2800, P:2650, kk:1250 },
+  { no:5,  nama:"Ayip",          L:1500, P:1400, kk:680  },
+  { no:6,  nama:"Betcbamu",      L:1800, P:1700, kk:800  },
+  { no:7,  nama:"Der Koumur",    L:2200, P:2100, kk:1000 },
+  { no:8,  nama:"Fayit",         L:2600, P:2500, kk:1150 },
+  { no:9,  nama:"Jagu",          L:1900, P:1800, kk:850  },
+  { no:10, nama:"Joutu",         L:1400, P:1350, kk:630  },
+  { no:11, nama:"Joerat",        L:2300, P:2200, kk:1050 },
+  { no:12, nama:"Kolf Braza",    L:1700, P:1600, kk:770  },
+  { no:13, nama:"Kopay",         L:2000, P:1900, kk:900  },
+  { no:14, nama:"Pantai Kasuari",L:2500, P:2400, kk:1100 },
+  { no:15, nama:"Pulau Tiga",    L:1300, P:1250, kk:590  },
+  { no:16, nama:"Safan",         L:1600, P:1550, kk:720  },
+  { no:17, nama:"Sawa Erma",     L:2400, P:2300, kk:1080 },
+  { no:18, nama:"Sirets",        L:1200, P:1150, kk:550  },
+  { no:19, nama:"Suator",        L:2700, P:2600, kk:1200 },
+  { no:20, nama:"Suru-suru",     L:1100, P:1050, kk:500  },
+  { no:21, nama:"Unir Sirau",    L:2100, P:2050, kk:950  },
+  { no:22, nama:"Jetsy",         L:1400, P:1300, kk:620  },
+  { no:23, nama:"Sor Ep",        L:1800, P:1750, kk:810  }
+];
+
+// Format angka
+function fmt(n) {
+  return new Intl.NumberFormat('id-ID').format(Math.round(n));
+}
+
+// Hitung total
+function hitungTotal() {
+  let tL = 0, tP = 0, tKK = 0;
+  data.forEach(d => {
+    d.total = d.L + d.P;
+    d.rasio = d.P > 0 ? (d.L / d.P * 100) : 0;
+    tL += d.L; tP += d.P; tKK += d.kk;
+  });
+  const totalJiwa = tL + tP;
+  data.forEach(d => {
+    d.persen = totalJiwa > 0 ? (d.total / totalJiwa * 100) : 0;
+  });
+  return { tL, tP, totalJiwa, tKK };
+}
+
+// Render kartu
+function renderCards() {
+  const t = hitungTotal();
+  document.getElementById('totalJiwa').textContent = fmt(t.totalJiwa);
+  document.getElementById('totalL').textContent = fmt(t.tL);
+  document.getElementById('totalP').textContent = fmt(t.tP);
+  document.getElementById('totalKK').textContent = fmt(t.tKK);
+  document.getElementById('totalDistrik').textContent = data.length;
+
+  const pctL = t.totalJiwa > 0 ? (t.tL / t.totalJiwa * 100) : 0;
+  const pctP = t.totalJiwa > 0 ? (t.tP / t.totalJiwa * 100) : 0;
+  document.getElementById('pctL').textContent = pctL.toFixed(2) + '% dari total';
+  document.getElementById('pctP').textContent = pctP.toFixed(2) + '% dari total';
+
+  const luas = 31983.44;
+  document.getElementById('kepadatan').textContent = (t.totalJiwa / luas).toFixed(2);
+}
+
+// Render tabel
+function renderTabel() {
+  const t = hitungTotal();
+  let html = '';
+  data.forEach(d => {
+    html += `<tr>
+      <td>${d.no}</td>
+      <td><b>${d.nama}</b></td>
+      <td class="num">${fmt(d.L)}</td>
+      <td class="num">${fmt(d.P)}</td>
+      <td class="num"><b>${fmt(d.total)}</b></td>
+      <td class="num">${d.persen.toFixed(2)}%</td>
+      <td class="num">${fmt(d.kk)}</td>
+      <td class="num">${d.rasio.toFixed(2)}</td>
+    </tr>`;
+  });
+  document.getElementById('tbody').innerHTML = html;
+
+  document.getElementById('tfoot').innerHTML = `<tr>
+    <td colspan="2">TOTAL</td>
+    <td class="num">${fmt(t.tL)}</td>
+    <td class="num">${fmt(t.tP)}</td>
+    <td class="num">${fmt(t.totalJiwa)}</td>
+    <td class="num">100,00%</td>
+    <td class="num">${fmt(t.tKK)}</td>
+    <td class="num">${(t.tL / t.tP * 100).toFixed(2)}</td>
+  </tr>`;
+}
+
+// Grafik batang
+function renderBar() {
+  new Chart(document.getElementById('chartBar'), {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.nama),
+      datasets: [{
+        label: 'Total Jiwa',
+        data: data.map(d => d.total),
+        backgroundColor: 'rgba(31, 78, 120, 0.7)',
+        borderColor: 'rgba(31, 78, 120, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => fmt(v) } },
+        x: { ticks: { font: { size: 9 }, maxRotation: 60 } }
+      }
+    }
+  });
+}
+
+// Grafik pie
+function renderPie() {
+  const t = hitungTotal();
+  new Chart(document.getElementById('chartPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Laki-laki', 'Perempuan'],
+      datasets: [{
+        data: [t.tL, t.tP],
+        backgroundColor: ['#2E75B6', '#E91E63'],
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+}
+
+// Jalankan semua
+renderCards();
+renderTabel();
+renderBar();
+renderPie();
+</script>
+
+</body>
+</html>
