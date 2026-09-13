@@ -2,113 +2,126 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard DKB Asmat 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard DKB & KTP-el - Dukcapil Asmat 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f0f2f5;
-    padding: 20px;
-    color: #333;
-  }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #333; padding: 20px; }
+
+  /* HEADER */
   .header {
     background: linear-gradient(135deg, #1F4E78, #2E75B6);
-    color: white;
-    padding: 25px 30px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: white; padding: 25px 30px; border-radius: 12px;
+    margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   .header h1 { font-size: 22px; margin-bottom: 6px; }
   .header p { font-size: 14px; opacity: 0.9; }
   .badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.2);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    margin-top: 10px;
-    margin-right: 5px;
+    display: inline-block; background: rgba(255,255,255,0.2);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px;
+    margin-top: 10px; margin-right: 5px;
   }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 16px; color: #1F4E78; margin: 25px 0 12px 0;
+    padding: 10px 15px; background: #E7F0F9;
+    border-left: 5px solid #1F4E78; border-radius: 4px;
+  }
+
+  /* CARDS */
   .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 15px; margin-bottom: 20px;
   }
   .card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
+    background: white; padding: 20px; border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-left: 5px solid #1F4E78;
+    border-left: 5px solid #1F4E78; transition: transform 0.2s;
   }
+  .card:hover { transform: translateY(-3px); }
   .card.blue { border-left-color: #2E75B6; }
   .card.pink { border-left-color: #E91E63; }
   .card.green { border-left-color: #4CAF50; }
   .card.orange { border-left-color: #FF9800; }
   .card.purple { border-left-color: #9C27B0; }
+  .card.red { border-left-color: #E53935; }
+  .card.teal { border-left-color: #009688; }
   .card-label {
-    font-size: 12px; color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    font-size: 12px; color: #666; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 8px;
   }
   .card-value {
-    font-size: 26px; font-weight: bold;
-    color: #1F4E78; margin-bottom: 4px;
+    font-size: 26px; font-weight: bold; color: #1F4E78;
+    margin-bottom: 4px;
   }
   .card-sub { font-size: 12px; color: #888; }
+
+  /* CHARTS */
   .charts {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: grid; grid-template-columns: 2fr 1fr;
     gap: 20px; margin-bottom: 20px;
   }
   @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
   .chart-box {
-    background: white; padding: 20px;
-    border-radius: 12px;
+    background: white; padding: 20px; border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .chart-box h3 {
-    font-size: 14px; color: #1F4E78;
-    margin-bottom: 15px; padding-bottom: 10px;
-    border-bottom: 2px solid #f0f2f5;
+    font-size: 14px; color: #1F4E78; margin-bottom: 15px;
+    padding-bottom: 10px; border-bottom: 2px solid #f0f2f5;
   }
   canvas { max-height: 350px; }
+
+  /* TABLE */
   .table-box {
-    background: white; padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    background: white; padding: 20px; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px;
   }
   .table-box h3 {
-    font-size: 14px; color: #1F4E78;
-    margin-bottom: 15px; padding-bottom: 10px;
-    border-bottom: 2px solid #f0f2f5;
+    font-size: 14px; color: #1F4E78; margin-bottom: 15px;
+    padding-bottom: 10px; border-bottom: 2px solid #f0f2f5;
   }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead { background: #1F4E78; color: white; }
   th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
   th { font-weight: 600; }
   tbody tr:hover { background: #f8f9fa; }
-  td.num { text-align: right; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
   tfoot { background: #FFD966; font-weight: bold; }
-  .footer {
-    text-align: center; padding: 20px;
-    color: #888; font-size: 12px;
+  tfoot td { border-bottom: none; }
+
+  /* STATUS BADGE */
+  .status-badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 12px; font-size: 11px; font-weight: bold;
+  }
+  .status-achieved { background: #E8F5E9; color: #2E7D32; }
+  .status-warning { background: #FFF3E0; color: #E65100; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .card, .chart-box, .table-box { box-shadow: none; border: 1px solid #ddd; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <h1>📊 Dashboard Data Kependudukan</h1>
+  <h1>📊 Dashboard Kependudukan & KTP-el</h1>
   <p>Kabupaten Asmat — DKB Semester I Tahun 2026</p>
   <div class="badge">📅 30 Juni 2026</div>
   <div class="badge">🏛️ Dinas Dukcapil Asmat</div>
+  <div class="badge">🪪 Data KTP-el Kemendagri</div>
 </div>
 
+<!-- ============ BAGIAN 1: AGREGAT PENDUDUK ============ -->
+<h2 class="section-title">👥 A. Data Agregat Penduduk</h2>
 <div class="cards">
   <div class="card blue">
     <div class="card-label">Total Penduduk</div>
@@ -142,6 +155,32 @@
   </div>
 </div>
 
+<!-- ============ BAGIAN 2: WAJIB KTP-EL ============ -->
+<h2 class="section-title">🪪 B. Data Wajib KTP-el (Target Nasional: 99,4%)</h2>
+<div class="cards">
+  <div class="card teal">
+    <div class="card-label">Total Wajib KTP-el</div>
+    <div class="card-value" id="totalWajib">-</div>
+    <div class="card-sub">jiwa (usia 17+ / menikah)</div>
+  </div>
+  <div class="card green">
+    <div class="card-label">Sudah Rekam</div>
+    <div class="card-value" id="totalRekam">-</div>
+    <div class="card-sub" id="pctRekam">-</div>
+  </div>
+  <div class="card red">
+    <div class="card-label">Belum Rekam</div>
+    <div class="card-value" id="totalBelum">-</div>
+    <div class="card-sub" id="pctBelum">-</div>
+  </div>
+  <div class="card blue">
+    <div class="card-label">Cakupan Nasional</div>
+    <div class="card-value" id="persenNasional">-</div>
+    <div class="card-sub" id="statusNasional">-</div>
+  </div>
+</div>
+
+<!-- ============ GRAFIK ============ -->
 <div class="charts">
   <div class="chart-box">
     <h3>📊 Jumlah Penduduk per Distrik</h3>
@@ -153,79 +192,114 @@
   </div>
 </div>
 
+<div class="charts">
+  <div class="chart-box" style="grid-column: 1 / -1;">
+    <h3>🪪 Cakupan Perekaman KTP-el per Distrik (%)</h3>
+    <canvas id="chartKTP"></canvas>
+  </div>
+</div>
+
+<!-- ============ TABEL GABUNGAN ============ -->
 <div class="table-box">
-  <h3>📋 Rekapitulasi Jumlah Penduduk per Distrik</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>No</th><th>Distrik</th><th>Laki-laki</th>
-        <th>Perempuan</th><th>Total Jiwa</th>
-        <th>% Penduduk</th><th>KK</th><th>Rasio L/P</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-    <tfoot id="tfoot"></tfoot>
-  </table>
+  <h3>📋 Tabel Gabungan: Data Penduduk + Wajib KTP-el per Distrik</h3>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Distrik</th>
+          <th>Penduduk L</th>
+          <th>Penduduk P</th>
+          <th>Total Jiwa</th>
+          <th>Wajib KTP-el</th>
+          <th>Sudah Rekam</th>
+          <th>Belum Rekam</th>
+          <th>% Cakupan</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot id="tfoot"></tfoot>
+    </table>
+  </div>
 </div>
 
 <div class="footer">
   © 2026 Dinas Kependudukan dan Pencatatan Sipil Kabupaten Asmat<br>
-  Sumber: DKB Semester I 2026
+  Sumber: DKB Semester I 2026 | Data KTP-el: Kemendagri
 </div>
 
 <script>
 // ============================================================
-// GANTI DATA DI BAWAH INI DENGAN DATA RIIL ANDA
+// DATA TERINTEGRASI — DKB + WAJIB KTP-EL
+// Ganti angka dengan data riil dari Dinas Dukcapil Asmat
+//
+// Struktur:
+//   no         : nomor urut
+//   nama       : nama distrik
+//   L          : penduduk laki-laki
+//   P          : penduduk perempuan
+//   kk         : kepala keluarga
+//   wajibKTP   : penduduk wajib KTP-el (usia 17+ / sudah menikah)
+//   sudahRekam : penduduk yang sudah perekaman biometrik KTP-el
 // ============================================================
 const data = [
-  { no:1,  nama:"Agats",         L:10000, P:10000, kk:9000 },
-  { no:2,  nama:"Akat",          L:3200, P:3000, kk:1400 },
-  { no:3,  nama:"Aswi",          L:2100, P:2000, kk:950  },
-  { no:4,  nama:"Atsy",          L:2800, P:2650, kk:1250 },
-  { no:5,  nama:"Ayip",          L:1500, P:1400, kk:680  },
-  { no:6,  nama:"Betcbamu",      L:1800, P:1700, kk:800  },
-  { no:7,  nama:"Der Koumur",    L:2200, P:2100, kk:1000 },
-  { no:8,  nama:"Fayit",         L:2600, P:2500, kk:1150 },
-  { no:9,  nama:"Jagu",          L:1900, P:1800, kk:850  },
-  { no:10, nama:"Joutu",         L:1400, P:1350, kk:630  },
-  { no:11, nama:"Joerat",        L:2300, P:2200, kk:1050 },
-  { no:12, nama:"Kolf Braza",    L:1700, P:1600, kk:770  },
-  { no:13, nama:"Kopay",         L:2000, P:1900, kk:900  },
-  { no:14, nama:"Pantai Kasuari",L:2500, P:2400, kk:1100 },
-  { no:15, nama:"Pulau Tiga",    L:1300, P:1250, kk:590  },
-  { no:16, nama:"Safan",         L:1600, P:1550, kk:720  },
-  { no:17, nama:"Sawa Erma",     L:2400, P:2300, kk:1080 },
-  { no:18, nama:"Sirets",        L:1200, P:1150, kk:550  },
-  { no:19, nama:"Suator",        L:2700, P:2600, kk:1200 },
-  { no:20, nama:"Suru-suru",     L:1100, P:1050, kk:500  },
-  { no:21, nama:"Unir Sirau",    L:2100, P:2050, kk:950  },
-  { no:22, nama:"Jetsy",         L:1400, P:1300, kk:620  },
-  { no:23, nama:"Sor Ep",        L:1800, P:1750, kk:810  }
+  { no:1,  nama:"Agats",         L:8500, P:8100, kk:3800, wajibKTP:12000, sudahRekam:11820 },
+  { no:2,  nama:"Akat",          L:3200, P:3000, kk:1400, wajibKTP:4500,  sudahRekam:4410 },
+  { no:3,  nama:"Aswi",          L:2100, P:2000, kk:950,  wajibKTP:3000,  sudahRekam:2940 },
+  { no:4,  nama:"Atsy",          L:2800, P:2650, kk:1250, wajibKTP:3950,  sudahRekam:3880 },
+  { no:5,  nama:"Ayip",          L:1500, P:1400, kk:680,  wajibKTP:2100,  sudahRekam:2050 },
+  { no:6,  nama:"Betcbamu",      L:1800, P:1700, kk:800,  wajibKTP:2550,  sudahRekam:2490 },
+  { no:7,  nama:"Der Koumur",    L:2200, P:2100, kk:1000, wajibKTP:3100,  sudahRekam:3040 },
+  { no:8,  nama:"Fayit",         L:2600, P:2500, kk:1150, wajibKTP:3700,  sudahRekam:3620 },
+  { no:9,  nama:"Jagu",          L:1900, P:1800, kk:850,  wajibKTP:2700,  sudahRekam:2640 },
+  { no:10, nama:"Joutu",         L:1400, P:1350, kk:630,  wajibKTP:2000,  sudahRekam:1950 },
+  { no:11, nama:"Joerat",        L:2300, P:2200, kk:1050, wajibKTP:3250,  sudahRekam:3180 },
+  { no:12, nama:"Kolf Braza",    L:1700, P:1600, kk:770,  wajibKTP:2400,  sudahRekam:2340 },
+  { no:13, nama:"Kopay",         L:2000, P:1900, kk:900,  wajibKTP:2850,  sudahRekam:2790 },
+  { no:14, nama:"Pantai Kasuari",L:2500, P:2400, kk:1100, wajibKTP:3550,  sudahRekam:3470 },
+  { no:15, nama:"Pulau Tiga",    L:1300, P:1250, kk:590,  wajibKTP:1850,  sudahRekam:1810 },
+  { no:16, nama:"Safan",         L:1600, P:1550, kk:720,  wajibKTP:2250,  sudahRekam:2200 },
+  { no:17, nama:"Sawa Erma",     L:2400, P:2300, kk:1080, wajibKTP:3400,  sudahRekam:3320 },
+  { no:18, nama:"Sirets",        L:1200, P:1150, kk:550,  wajibKTP:1700,  sudahRekam:1660 },
+  { no:19, nama:"Suator",        L:2700, P:2600, kk:1200, wajibKTP:3850,  sudahRekam:3770 },
+  { no:20, nama:"Suru-suru",     L:1100, P:1050, kk:500,  wajibKTP:1550,  sudahRekam:1520 },
+  { no:21, nama:"Unir Sirau",    L:2100, P:2050, kk:950,  wajibKTP:3000,  sudahRekam:2940 },
+  { no:22, nama:"Jetsy",         L:1400, P:1300, kk:620,  wajibKTP:1950,  sudahRekam:1900 },
+  { no:23, nama:"Sor Ep",        L:1800, P:1750, kk:810,  wajibKTP:2550,  sudahRekam:2490 }
 ];
 
-// Format angka
-function fmt(n) {
-  return new Intl.NumberFormat('id-ID').format(Math.round(n));
-}
+const TARGET_NASIONAL = 99.4;
+const LUAS_WILAYAH = 31983.44;
 
-// Hitung total
+// Format angka Indonesia
+const fmt = n => new Intl.NumberFormat('id-ID').format(Math.round(n));
+
+// Hitung semua total & persentase
 function hitungTotal() {
-  let tL = 0, tP = 0, tKK = 0;
+  let tL=0, tP=0, tKK=0, tWajib=0, tRekam=0;
   data.forEach(d => {
     d.total = d.L + d.P;
     d.rasio = d.P > 0 ? (d.L / d.P * 100) : 0;
+    d.belumRekam = d.wajibKTP - d.sudahRekam;
+    d.persenKTP = d.wajibKTP > 0 ? (d.sudahRekam / d.wajibKTP * 100) : 0;
     tL += d.L; tP += d.P; tKK += d.kk;
+    tWajib += d.wajibKTP; tRekam += d.sudahRekam;
   });
   const totalJiwa = tL + tP;
   data.forEach(d => {
     d.persen = totalJiwa > 0 ? (d.total / totalJiwa * 100) : 0;
   });
-  return { tL, tP, totalJiwa, tKK };
+  return { tL, tP, totalJiwa, tKK, tWajib, tRekam, tBelum: tWajib - tRekam };
 }
 
-// Render kartu
+// ============================================================
+// RENDER KARTU
+// ============================================================
 function renderCards() {
   const t = hitungTotal();
+
+  // Kartu Penduduk
   document.getElementById('totalJiwa').textContent = fmt(t.totalJiwa);
   document.getElementById('totalL').textContent = fmt(t.tL);
   document.getElementById('totalP').textContent = fmt(t.tP);
@@ -236,41 +310,68 @@ function renderCards() {
   const pctP = t.totalJiwa > 0 ? (t.tP / t.totalJiwa * 100) : 0;
   document.getElementById('pctL').textContent = pctL.toFixed(2) + '% dari total';
   document.getElementById('pctP').textContent = pctP.toFixed(2) + '% dari total';
+  document.getElementById('kepadatan').textContent = (t.totalJiwa / LUAS_WILAYAH).toFixed(2);
 
-  const luas = 31983.44;
-  document.getElementById('kepadatan').textContent = (t.totalJiwa / luas).toFixed(2);
+  // Kartu KTP-el
+  const persenNasional = t.tWajib > 0 ? (t.tRekam / t.tWajib * 100) : 0;
+  document.getElementById('totalWajib').textContent = fmt(t.tWajib);
+  document.getElementById('totalRekam').textContent = fmt(t.tRekam);
+  document.getElementById('totalBelum').textContent = fmt(t.tBelum);
+  document.getElementById('pctRekam').textContent = persenNasional.toFixed(2) + '% dari wajib KTP';
+  document.getElementById('pctBelum').textContent = (100 - persenNasional).toFixed(2) + '% dari wajib KTP';
+  document.getElementById('persenNasional').textContent = persenNasional.toFixed(2) + '%';
+
+  const statusEl = document.getElementById('statusNasional');
+  if (persenNasional >= TARGET_NASIONAL) {
+    statusEl.textContent = '✅ Capai Target Nasional';
+    statusEl.style.color = '#2E7D32';
+  } else {
+    statusEl.textContent = '⚠️ Di Bawah Target (' + TARGET_NASIONAL + '%)';
+    statusEl.style.color = '#E65100';
+  }
 }
 
-// Render tabel
+// ============================================================
+// RENDER TABEL GABUNGAN
+// ============================================================
 function renderTabel() {
   const t = hitungTotal();
   let html = '';
   data.forEach(d => {
+    const statusClass = d.persenKTP >= TARGET_NASIONAL ? 'status-achieved' : 'status-warning';
+    const statusText = d.persenKTP >= TARGET_NASIONAL ? '✅ Tercapai' : '⚠️ Perlu Perhatian';
     html += `<tr>
       <td>${d.no}</td>
       <td><b>${d.nama}</b></td>
       <td class="num">${fmt(d.L)}</td>
       <td class="num">${fmt(d.P)}</td>
       <td class="num"><b>${fmt(d.total)}</b></td>
-      <td class="num">${d.persen.toFixed(2)}%</td>
-      <td class="num">${fmt(d.kk)}</td>
-      <td class="num">${d.rasio.toFixed(2)}</td>
+      <td class="num">${fmt(d.wajibKTP)}</td>
+      <td class="num" style="color:#2E7D32;">${fmt(d.sudahRekam)}</td>
+      <td class="num" style="color:#E53935;">${fmt(d.belumRekam)}</td>
+      <td class="num"><b>${d.persenKTP.toFixed(2)}%</b></td>
+      <td><span class="status-badge ${statusClass}">${statusText}</span></td>
     </tr>`;
   });
   document.getElementById('tbody').innerHTML = html;
 
+  const persenTotal = t.tWajib > 0 ? (t.tRekam / t.tWajib * 100) : 0;
   document.getElementById('tfoot').innerHTML = `<tr>
     <td colspan="2">TOTAL</td>
     <td class="num">${fmt(t.tL)}</td>
     <td class="num">${fmt(t.tP)}</td>
     <td class="num">${fmt(t.totalJiwa)}</td>
-    <td class="num">100,00%</td>
-    <td class="num">${fmt(t.tKK)}</td>
-    <td class="num">${(t.tL / t.tP * 100).toFixed(2)}</td>
+    <td class="num">${fmt(t.tWajib)}</td>
+    <td class="num">${fmt(t.tRekam)}</td>
+    <td class="num">${fmt(t.tBelum)}</td>
+    <td class="num">${persenTotal.toFixed(2)}%</td>
+    <td>-</td>
   </tr>`;
 }
 
-// Grafik batang
+// ============================================================
+// GRAFIK BATANG PENDUDUK
+// ============================================================
 function renderBar() {
   new Chart(document.getElementById('chartBar'), {
     type: 'bar',
@@ -295,7 +396,9 @@ function renderBar() {
   });
 }
 
-// Grafik pie
+// ============================================================
+// PIE CHART JENIS KELAMIN
+// ============================================================
 function renderPie() {
   const t = hitungTotal();
   new Chart(document.getElementById('chartPie'), {
@@ -315,12 +418,55 @@ function renderPie() {
   });
 }
 
-// Jalankan semua
+// ============================================================
+// GRAFIK CAKUPAN KTP-EL
+// ============================================================
+function renderKTPChart() {
+  new Chart(document.getElementById('chartKTP'), {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.nama),
+      datasets: [{
+        label: '% Cakupan KTP-el',
+        data: data.map(d => d.persenKTP),
+        backgroundColor: data.map(d =>
+          d.persenKTP >= TARGET_NASIONAL ? 'rgba(76, 175, 80, 0.7)' : 'rgba(229, 57, 53, 0.7)'
+        ),
+        borderColor: data.map(d =>
+          d.persenKTP >= TARGET_NASIONAL ? '#4CAF50' : '#E53935'
+        ),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.parsed.y.toFixed(2)}% (Target: ${TARGET_NASIONAL}%)`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false, min: 90, max: 100,
+          ticks: { callback: v => v + '%' }
+        },
+        x: { ticks: { font: { size: 9 }, maxRotation: 60 } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
 renderCards();
 renderTabel();
 renderBar();
 renderPie();
+renderKTPChart();
 </script>
-
 </body>
 </html>
